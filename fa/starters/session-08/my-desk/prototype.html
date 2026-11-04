@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>میز کار من — نمونهٔ اولیه</title>
+<style>
+  :root {
+    --bg: #f6f5f2;
+    --card: #ffffff;
+    --text: #1f2328;
+    --muted: #6b7078;
+    --line: #e4e2dc;
+    --accent: #2f6f5e;
+    --accent-soft: #e3efe9;
+    --high: #c0392b;
+    --high-soft: #fbe9e7;
+    --mid: #b7791f;
+    --mid-soft: #fdf3e1;
+    --low: #5a6b7d;
+    --low-soft: #edf1f5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Vazirmatn, "Segoe UI", Tahoma, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 14px;
+  }
+  .top h1 { margin: 0; font-size: 20px; }
+  .today-date { color: var(--muted); font-size: 14px; }
+  nav { display: flex; gap: 4px; margin-top: 10px; overflow-x: auto; }
+  nav button {
+    border: none;
+    background: none;
+    font: inherit;
+    color: var(--muted);
+    padding: 8px 14px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  nav button:hover { color: var(--text); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  main { padding-block: 24px 48px; }
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .section-head h2 { margin: 0; font-size: 18px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+  .btn {
+    font: inherit;
+    font-size: 14px;
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  .btn.ghost { background: transparent; color: var(--accent); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .filters button {
+    font: inherit;
+    font-size: 13px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .filters button.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .list { display: flex; flex-direction: column; gap: 8px; }
+  .task {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .task.done .title { text-decoration: line-through; color: var(--muted); }
+  .task .body { flex: 1; min-width: 0; }
+  .task .title { font-weight: 500; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; color: var(--muted); }
+  .chip {
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 1px 8px;
+    white-space: nowrap;
+  }
+  .p-high { background: var(--high-soft); color: var(--high); }
+  .p-mid { background: var(--mid-soft); color: var(--mid); }
+  .p-low { background: var(--low-soft); color: var(--low); }
+  .overdue { background: var(--high); color: #fff; }
+  .status {
+    font: inherit;
+    font-size: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    border-radius: 6px;
+    padding: 2px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .status.s-doing { border-color: var(--mid); color: var(--mid); }
+  .status.s-done { border-color: var(--accent); color: var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .card.click { cursor: pointer; }
+  .card.click:hover { border-color: var(--accent); }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 10px; }
+  .bar span { display: block; height: 100%; background: var(--accent); }
+  .note p { margin: 0 0 10px; white-space: pre-line; }
+  .note .meta { justify-content: space-between; }
+  .proj-tag { background: var(--accent-soft); color: var(--accent); }
+  .empty { color: var(--muted); text-align: center; padding: 32px 0; }
+  .summary { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .summary .card { flex: 1; min-width: 140px; }
+  .summary .num { font-size: 26px; font-weight: 700; }
+  .summary .lbl { color: var(--muted); font-size: 13px; }
+  .back { background: none; border: none; font: inherit; color: var(--accent); cursor: pointer; padding: 0; margin-bottom: 12px; }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="top">
+      <h1>میز کار من</h1>
+      <span class="today-date" id="todayDate"></span>
+    </div>
+    <nav id="nav">
+      <button data-view="today" class="active">امروز</button>
+      <button data-view="tasks">کارها</button>
+      <button data-view="projects">پروژه‌ها</button>
+      <button data-view="notes">یادداشت‌ها</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+// ---------- ابزار تاریخ و عدد ----------
+const DAY = 24 * 60 * 60 * 1000;
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const daysFromToday = n => new Date(today.getTime() + n * DAY);
+
+const faNum = n => n.toLocaleString('fa-IR');
+const fullDate = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+const shortDate = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { day: 'numeric', month: 'long' });
+const diffDays = d => Math.round((d - today) / DAY);
+
+function dueLabel(d) {
+  const diff = diffDays(d);
+  if (diff === 0) return 'امروز';
+  if (diff === 1) return 'فردا';
+  if (diff === -1) return 'دیروز';
+  return shortDate.format(d);
+}
+
+// ---------- دادهٔ ساختگی ----------
+const projects = [
+  { id: 1, name: 'بازسازی سایت' },
+  { id: 2, name: 'دورهٔ آموزشی' },
+  { id: 3, name: 'کارهای خانه' },
+];
+
+const tasks = [
+  { title: 'نوشتن متن صفحهٔ «دربارهٔ ما»', priority: 'high', due: -2, status: 'doing', project: 1 },
+  { title: 'پرداخت قبض برق', priority: 'high', due: -1, status: 'todo', project: 3 },
+  { title: 'ضبط جلسهٔ سوم دوره', priority: 'high', due: 0, status: 'todo', project: 2 },
+  { title: 'جواب دادن به ایمیل طراح', priority: 'mid', due: 0, status: 'todo', project: 1 },
+  { title: 'خرید هفتگی', priority: 'low', due: 0, status: 'todo', project: 3 },
+  { title: 'مرور تمرین‌های شرکت‌کننده‌ها', priority: 'mid', due: -3, status: 'todo', project: 2 },
+  { title: 'تماس با بیمه', priority: 'mid', due: 1, status: 'todo', project: null },
+  { title: 'انتخاب رنگ‌های اصلی سایت', priority: 'mid', due: 3, status: 'todo', project: 1 },
+  { title: 'آماده کردن اسلایدهای جلسهٔ چهارم', priority: 'high', due: 5, status: 'todo', project: 2 },
+  { title: 'تعمیر شیر آشپزخانه', priority: 'low', due: 7, status: 'todo', project: 3 },
+  { title: 'خواندن فصل دوم کتاب', priority: 'low', due: 10, status: 'todo', project: null },
+  { title: 'خرید دامنهٔ سایت', priority: 'high', due: -5, status: 'done', project: 1 },
+  { title: 'نوشتن سرفصل‌های دوره', priority: 'mid', due: -8, status: 'done', project: 2 },
+].map((t, i) => ({ ...t, id: i + 1, due: daysFromToday(t.due) }));
+
+const notes = [
+  { text: 'ایده: یک بخش «سؤال‌های رایج» به سایت اضافه شود.', project: 1, date: -1 },
+  { text: 'در جلسهٔ سوم، مثال فروشگاه را جای مثال کتابخانه بگذارم؛ ملموس‌تر است.', project: 2, date: 0 },
+  { text: 'رمز وای‌فای مهمان را عوض کنم.', project: 3, date: -4 },
+  { text: 'کتاب‌هایی که دوستان پیشنهاد دادند:\n– عادت‌های اتمی\n– کار عمیق', project: null, date: -6 },
+  { text: 'از طراح بپرسم فایل لوگو را با فرمت SVG هم دارد یا نه.', project: 1, date: -2 },
+].map((n, i) => ({ ...n, id: i + 1, date: daysFromToday(n.date) }));
+
+const PRIORITY = { high: { label: 'بالا', rank: 0 }, mid: { label: 'متوسط', rank: 1 }, low: { label: 'پایین', rank: 2 } };
+const STATUS = { todo: 'انجام‌نشده', doing: 'در حال انجام', done: 'انجام‌شده' };
+const NEXT_STATUS = { todo: 'doing', doing: 'done', done: 'todo' };
+
+const projectName = id => projects.find(p => p.id === id)?.name;
+const byPriorityThenDue = (a, b) => PRIORITY[a.priority].rank - PRIORITY[b.priority].rank || a.due - b.due;
+
+// ---------- وضعیت صفحه (فقط در حافظه، چیزی ذخیره نمی‌شود) ----------
+const state = { view: 'today', taskFilter: 'open', openProject: null };
+
+// ---------- ساختن تکه‌های صفحه ----------
+function taskRow(t, { showProject = true } = {}) {
+  const overdue = t.status !== 'done' && diffDays(t.due) < 0;
+  const proj = showProject && t.project ? `<span>📁 ${projectName(t.project)}</span>` : '';
+  return `
+    <div class="task ${t.status === 'done' ? 'done' : ''}">
+      <div class="body">
+        <div class="title">${t.title}</div>
+        <div class="meta">
+          <span class="chip p-${t.priority}">اولویت ${PRIORITY[t.priority].label}</span>
+          <span>موعد: ${dueLabel(t.due)}</span>
+          ${overdue ? `<span class="chip overdue">${faNum(-diffDays(t.due))} روز عقب</span>` : ''}
+          ${proj}
+        </div>
+      </div>
+      <button class="status s-${t.status}" data-task="${t.id}" title="برای تغییر وضعیت کلیک کنید">${STATUS[t.status]}</button>
+    </div>`;
+}
+
+const listOrEmpty = (items, emptyText, opts) =>
+  items.length ? `<div class="list">${items.map(t => taskRow(t, opts)).join('')}</div>` : `<p class="empty">${emptyText}</p>`;
+
+function viewToday() {
+  const due = tasks.filter(t => t.status !== 'done' && diffDays(t.due) <= 0).sort(byPriorityThenDue);
+  const overdueCount = due.filter(t => diffDays(t.due) < 0).length;
+  const doingCount = tasks.filter(t => t.status === 'doing').length;
+  const first = due[0];
+  return `
+    <div class="summary">
+      <div class="card"><div class="num">${faNum(due.length)}</div><div class="lbl">کار برای امروز</div></div>
+      <div class="card"><div class="num" style="color:var(--high)">${faNum(overdueCount)}</div><div class="lbl">عقب‌افتاده</div></div>
+      <div class="card"><div class="num" style="color:var(--mid)">${faNum(doingCount)}</div><div class="lbl">در حال انجام</div></div>
+    </div>
+    <div class="section-head"><h2>کارهای امروز</h2></div>
+    <p class="sub">${first ? `پیشنهاد برای شروع: <strong>${first.title}</strong>` : 'همهٔ کارهای امروز انجام شده‌اند. 🎉'}</p>
+    ${listOrEmpty(due, 'کاری برای امروز نمانده.')}`;
+}
+
+function viewTasks() {
+  const filters = { open: 'باز', todo: 'انجام‌نشده', doing: 'در حال انجام', done: 'انجام‌شده', all: 'همه' };
+  const list = tasks
+    .filter(t => state.taskFilter === 'all' || (state.taskFilter === 'open' ? t.status !== 'done' : t.status === state.taskFilter))
+    .sort((a, b) => a.due - b.due);
+  return `
+    <div class="section-head">
+      <h2>همهٔ کارها</h2>
+      <button class="btn" data-fake="کار جدید">+ کار جدید</button>
+    </div>
+    <div class="filters">
+      ${Object.entries(filters).map(([k, v]) =>
+        `<button data-filter="${k}" class="${state.taskFilter === k ? 'active' : ''}">${v}</button>`).join('')}
+    </div>
+    ${listOrEmpty(list, 'کاری با این وضعیت نیست.')}`;
+}
+
+function viewProjects() {
+  if (state.openProject) {
+    const p = projects.find(p => p.id === state.openProject);
+    const list = tasks.filter(t => t.project === p.id).sort((a, b) => a.due - b.due);
+    const pNotes = notes.filter(n => n.project === p.id);
+    return `
+      <button class="back" data-back>→ بازگشت به پروژه‌ها</button>
+      <div class="section-head"><h2>${p.name}</h2></div>
+      ${listOrEmpty(list, 'این پروژه هنوز کاری ندارد.', { showProject: false })}
+      ${pNotes.length ? `<h3 style="margin:24px 0 12px;font-size:16px">یادداشت‌های این پروژه</h3>
+        <div class="grid">${pNotes.map(noteCard).join('')}</div>` : ''}`;
+  }
+  return `
+    <div class="section-head">
+      <h2>پروژه‌ها</h2>
+      <button class="btn" data-fake="پروژهٔ جدید">+ پروژهٔ جدید</button>
+    </div>
+    <div class="grid">
+      ${projects.map(p => {
+        const all = tasks.filter(t => t.project === p.id);
+        const done = all.filter(t => t.status === 'done').length;
+        const pct = all.length ? Math.round(done / all.length * 100) : 0;
+        return `
+          <div class="card click" data-project="${p.id}">
+            <h3>${p.name}</h3>
+            <div class="meta"><span>${faNum(all.length)} کار</span><span>${faNum(done)} انجام‌شده</span></div>
+            <div class="bar"><span style="width:${pct}%"></span></div>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function noteCard(n) {
+  return `
+    <div class="card note">
+      <p>${n.text}</p>
+      <div class="meta">
+        ${n.project ? `<span class="chip proj-tag">${projectName(n.project)}</span>` : '<span></span>'}
+        <span>${dueLabel(n.date)}</span>
+      </div>
+    </div>`;
+}
+
+function viewNotes() {
+  const list = [...notes].sort((a, b) => b.date - a.date);
+  return `
+    <div class="section-head">
+      <h2>یادداشت‌ها</h2>
+      <button class="btn" data-fake="یادداشت جدید">+ یادداشت جدید</button>
+    </div>
+    <div class="grid">${list.map(noteCard).join('')}</div>`;
+}
+
+const VIEWS = { today: viewToday, tasks: viewTasks, projects: viewProjects, notes: viewNotes };
+
+function render() {
+  document.getElementById('main').innerHTML = VIEWS[state.view]();
+  document.querySelectorAll('#nav button').forEach(b => b.classList.toggle('active', b.dataset.view === state.view));
+}
+
+// ---------- کلیک‌ها ----------
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => (el.hidden = true), 2200);
+}
+
+document.getElementById('nav').addEventListener('click', e => {
+  const b = e.target.closest('button[data-view]');
+  if (!b) return;
+  state.view = b.dataset.view;
+  state.openProject = null;
+  render();
+});
+
+document.getElementById('main').addEventListener('click', e => {
+  const el = e.target.closest('[data-task],[data-filter],[data-project],[data-back],[data-fake]');
+  if (!el) return;
+  if (el.dataset.task) {
+    const t = tasks.find(t => t.id === +el.dataset.task);
+    t.status = NEXT_STATUS[t.status];
+  } else if (el.dataset.filter) {
+    state.taskFilter = el.dataset.filter;
+  } else if (el.dataset.project) {
+    state.openProject = +el.dataset.project;
+  } else if ('back' in el.dataset) {
+    state.openProject = null;
+  } else if (el.dataset.fake) {
+    return toast(`«${el.dataset.fake}» در این نمونه هنوز کار نمی‌کند.`);
+  }
+  render();
+});
+
+const part = type => fullDate.formatToParts(today).find(p => p.type === type).value;
+document.getElementById('todayDate').textContent = `${part('weekday')} ${part('day')} ${part('month')} ${part('year')}`;
+render();
+</script>
+</body>
+</html>

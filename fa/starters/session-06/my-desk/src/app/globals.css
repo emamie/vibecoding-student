@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* رنگ‌ها از prototype.html */
+@theme {
+  --color-bg: #f6f5f2;
+  --color-card: #ffffff;
+  --color-text: #1f2328;
+  --color-muted: #6b7078;
+  --color-line: #e4e2dc;
+  --color-accent: #2f6f5e;
+  --color-accent-soft: #e3efe9;
+  --color-high: #c0392b;
+  --color-high-soft: #fbe9e7;
+  --color-mid: #b7791f;
+  --color-mid-soft: #fdf3e1;
+  --color-low: #5a6b7d;
+  --color-low-soft: #edf1f5;
+}
